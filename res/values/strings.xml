@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, ListaAlunos!</string>
+    <string name="app_name">CadastroAlunos</string>
+    <string name="add_new">Add</string>
+    <string name="remove">Remover</string>
+</resources>

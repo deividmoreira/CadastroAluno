@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  <ScrollView
+  		android:layout_width="fill_parent"
+  		android:layout_height="fill_parent">
+  		<LinearLayout
+  			android:orientation="vertical"
+  			android:layout_width="fill_parent"
+  			android:layout_height="fill_parent">
+  			<ImageButton
+  				android:layout_width="wrap_content"
+  				android:layout_height="wrap_content"
+  				android:layout_gravity="center_vertical"
+  				android:id="@+id/botaoImagem"
+  				android:background="@drawable/logo"/>
+  			<TextView
+  				android:layout_width="wrap_content"
+  				android:layout_height="wrap_content"
+  				android:id="@+id/nome"
+  				android:text="Nome: "/>
+  			<EditText 
+  				android:layout_height="wrap_content"
+  				android:layout_width="fill_parent"
+  				android:hint="Digite o nome"
+  				android:id="@+id/editNome"/>
+  			<TextView
+  				android:layout_width="fill_parent"
+  				android:layout_height="wrap_content"
+  				android:id="@+id/telefone"
+  				android:text="Telefone: "/>
+  			<EditText 
+  				android:layout_height="wrap_content"
+  				android:layout_width="fill_parent"
+  				android:hint="Digite o telefone"
+  				android:id="@+id/editTelefone"/>
+  			<TextView
+  				android:layout_width="fill_parent"
+  				android:layout_height="wrap_content"
+  				android:id="@+id/endereco"
+  				android:text="Endereço: "/>	
+  			<EditText 
+  				android:layout_height="wrap_content"
+  				android:layout_width="fill_parent"
+  				android:hint="Digite o endereço"
+  				android:id="@+id/editEndereco"/>
+  			<TextView
+  				android:layout_width="fill_parent"
+  				android:layout_height="wrap_content"
+  				android:id="@+id/site"
+  				android:text="Site: "/>
+  			<EditText 
+  				android:layout_height="wrap_content"
+  				android:layout_width="fill_parent"
+  				android:hint="Digite o site"
+  				android:id="@+id/editSite"/>
+  			<TextView
+  				android:layout_width="fill_parent"
+  				android:layout_height="wrap_content"
+  				android:id="@+id/nota"
+  				android:text="Nota: "/>
+  			<RatingBar
+  				android:layout_width="wrap_content"
+  				android:layout_height="wrap_content"
+  				android:id="@+id/editNota"/>
+  			<Button
+  				android:layout_width="fill_parent"
+  				android:layout_height="wrap_content"
+  				android:text="Inserir"
+  				android:id="@+id/botaoInserir"/>												
+  		</LinearLayout>
+  </ScrollView>  		
+</LinearLayout>
