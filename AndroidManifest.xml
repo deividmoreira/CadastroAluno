@@ -16,7 +16,12 @@
 		
 		<activity android:name=".Formulario" android:label="Novo Aluno...">
 			
+		</activity>
+		
+		<activity android:name=".Galeria" android:label="Galeria">
+			
 		</activity>         
 	
     </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

@@ -15,4 +15,11 @@
     	android:text="Novo" 
     	android:layout_below="@+id/listaAlunos">
     </Button>
+    <Button 
+    	android:layout_height="wrap_content" 
+    	android:layout_width="wrap_content" 
+    	android:id="@+id/botaoGaleria" 
+    	android:text="Galeria" 
+    	android:layout_alignRight="@+id/botaoInserir">
+    </Button>
 </RelativeLayout>

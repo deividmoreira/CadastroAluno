@@ -1,10 +1,18 @@
 package br.com.cadastro;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONStringer;
+
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -21,14 +29,13 @@ import br.com.cadastro.modelo.Aluno;
 public class ListaAlunos extends Activity {
 	
 	static final private int ADD_NEW_TODO = Menu.FIRST;
-	static final private int REMOVE_TODO = Menu.FIRST + 1;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lista);
-        
+//		ProgressDialog show = ProgressDialog.show(ListaAlunos.this, "Aguarde...", "Enviando dados!", true);        
         AlunoDAO alunoDAO = new AlunoDAO(this, "Aluno", null, 1);
         List<Aluno> alunos = alunoDAO.getLista();
         alunoDAO.close();
@@ -54,7 +61,12 @@ public class ListaAlunos extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View view, int posicao,
 					long id) {
-				Toast.makeText(ListaAlunos.this, "Posicão é: "+posicao, Toast.LENGTH_SHORT).show();
+				SharedPreferences preferences = getSharedPreferences("alunoselecionado", MODE_PRIVATE);
+				SharedPreferences.Editor editor = preferences.edit();
+				editor.putInt("posicao", posicao);
+				editor.commit();
+				
+				startActivity(new Intent(ListaAlunos.this, Formulario.class));
 			}
         	
 		});
@@ -66,6 +78,15 @@ public class ListaAlunos extends Activity {
 				startActivity(new Intent(ListaAlunos.this, Formulario.class));				
 			}
 		});
+        
+       Button botaoGaleria = (Button) findViewById(R.id.botaoGaleria);
+       botaoGaleria.setOnClickListener(new View.OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			startActivity(new Intent(ListaAlunos.this, Galeria.class));
+		}
+	});
     }
     
     @Override
@@ -81,17 +102,11 @@ public class ListaAlunos extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
     	super.onCreateOptionsMenu(menu);
-    	// Create and add new menu items.
     	MenuItem itemAdd = menu.add(0, ADD_NEW_TODO, Menu.NONE,
     	R.string.add_new);
-    	MenuItem itemRem = menu.add(0, REMOVE_TODO, Menu.NONE,
-    	R.string.remove);
-    	// Assign icons
     	itemAdd.setIcon(R.drawable.icon);
-    	itemRem.setIcon(R.drawable.icon);
-    	// Allocate shortcuts to each of them.
-    	itemAdd.setShortcut('0', 'a');
-    	itemRem.setShortcut('1', 'r');
+    	MenuItem sincronizar = menu.add("Sincronizar");
+    	sincronizar.setIcon(R.drawable.icon);
     	return true;
     }
     
@@ -99,6 +114,45 @@ public class ListaAlunos extends Activity {
     public boolean onOptionsItemSelected(MenuItem item){
     	if(item.getItemId() == 0){
     		Toast.makeText(ListaAlunos.this, "Você clicou no novoAluno", Toast.LENGTH_LONG).show();
+    	}
+    	if(item.getTitle().equals("Sincronizar")){
+    		final ProgressDialog progressDialog = ProgressDialog.show(ListaAlunos.this, "Aguarde...", "Enviando dados", true);
+    		final Toast aviso = Toast.makeText(ListaAlunos.this, "Dados enviados com sucessos", Toast.LENGTH_SHORT);
+    		new Thread(new Runnable() {
+    			String retorno;
+				@Override
+				public void run() {
+					try{
+						Thread.sleep(2000);
+						AlunoDAO alunoDAO = new AlunoDAO(ListaAlunos.this);
+						List<Aluno> alunos = alunoDAO.getLista();
+						
+						JSONStringer j = new JSONStringer();
+						j.object()
+						.key("alunos").array();
+						for (Aluno aluno : alunos) {
+							j.value(aluno);
+						}
+						j.endArray()
+						.endObject();
+						alunoDAO.close();
+						Sicronismo sicronismo = new Sicronismo();
+						retorno = sicronismo.enviarDado(j.toString());
+						Log.i("Retorno", retorno);
+					}catch (JSONException e) {
+						Log.e("ERROR", "JSON", e);
+					} catch (InterruptedException e) {
+						Log.e("ERROR", "Thread", e);
+					} catch (ClientProtocolException e) {
+						Log.e("ERROR", "Protocolo", e);
+					} catch (IOException e) {
+						Log.e("ERROR", "Leitura", e);
+					}
+					
+				}
+			});
+    		aviso.show();
+    		progressDialog.dismiss();
     	}
     	return false;
     }
